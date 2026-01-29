@@ -1,8 +1,28 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
     const location = useLocation();
+
+    const [userRole, setUserRole] = React.useState(localStorage.getItem('userRole'));
+    const navigate = useNavigate();
+
+    React.useEffect(() => {
+        // Simple event listener for storage changes (works across tabs, but also good for re-renders on mount)
+        const checkUser = () => setUserRole(localStorage.getItem('userRole'));
+        window.addEventListener('storage', checkUser);
+
+        // Also check on location change as login happens in same tab
+        checkUser();
+
+        return () => window.removeEventListener('storage', checkUser);
+    }, [location]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('userRole');
+        setUserRole(null);
+        navigate('/login');
+    };
 
     const navStyle = {
         position: 'fixed',
@@ -36,7 +56,11 @@ const Navbar = () => {
         fontSize: '0.9rem',
         fontWeight: '500',
         color: 'rgba(255,255,255,0.7)',
-        position: 'relative'
+        position: 'relative',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        padding: 0
     };
 
     const activeLinkStyle = {
@@ -56,12 +80,31 @@ const Navbar = () => {
                 >
                     HOME
                 </Link>
-                <Link
-                    to="/login"
-                    style={location.pathname === '/login' ? activeLinkStyle : linkStyle}
-                >
-                    LOGIN
-                </Link>
+
+                {userRole === 'user' && (
+                    <Link
+                        to="/user/dashboard"
+                        style={location.pathname === '/user/dashboard' ? activeLinkStyle : linkStyle}
+                    >
+                        DASHBOARD
+                    </Link>
+                )}
+
+                {userRole ? (
+                    <button
+                        onClick={handleLogout}
+                        style={linkStyle}
+                    >
+                        LOGOUT
+                    </button>
+                ) : (
+                    <Link
+                        to="/login"
+                        style={location.pathname === '/login' ? activeLinkStyle : linkStyle}
+                    >
+                        LOGIN
+                    </Link>
+                )}
             </div>
         </nav>
     );

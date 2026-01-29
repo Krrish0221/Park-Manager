@@ -13,6 +13,14 @@ import GateControl from './pages/admin/GateControl';
 import Security from './pages/admin/Security';
 import Analytics from './pages/admin/Analytics';
 import Settings from './pages/admin/Settings';
+import UserLayout from './layouts/UserLayout';
+import UserHome from './pages/user/UserHome';
+import FindParking from './pages/user/FindParking';
+import MyBookings from './pages/user/MyBookings';
+import LiveSession from './pages/user/LiveSession';
+import Wallet from './pages/user/Wallet';
+import MyVehicles from './pages/user/MyVehicles';
+import UserProfile from './pages/user/UserProfile';
 
 
 
@@ -28,6 +36,18 @@ function App() {
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
+            </Route>
+
+            {/* User Routes with Sidebar */}
+            <Route path="/user" element={<UserLayout />}>
+              <Route index element={<Navigate to="home" replace />} />
+              <Route path="home" element={<UserHome />} />
+              <Route path="find-parking" element={<FindParking />} />
+              <Route path="bookings" element={<MyBookings />} />
+              <Route path="live" element={<LiveSession />} />
+              <Route path="wallet" element={<Wallet />} />
+              <Route path="vehicles" element={<MyVehicles />} />
+              <Route path="profile" element={<UserProfile />} />
             </Route>
 
             {/* Admin Routes with Sidebar */}

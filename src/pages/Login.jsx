@@ -13,7 +13,9 @@ const Login = () => {
         if (isAdmin) {
             navigate('/admin/dashboard');
         } else {
-            alert("User Dashboard coming soon!");
+            // Set user role (normally handled by backend/auth context)
+            localStorage.setItem('userRole', 'user');
+            navigate('/user/home');
         }
     };
 
